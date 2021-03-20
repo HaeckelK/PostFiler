@@ -4,7 +4,14 @@ import os
 from werkzeug.datastructures import FileStorage
 
 import processes
-from interfaces import JSONFileDetailsRecorder, LocalFileSaver, TextFileCategoryCreator, TextFileCategoryLoader
+from interfaces import (
+    JSONFileDetailsRecorder,
+    LocalFileSaver,
+    TextFileCategoryCreator,
+    TextFileCategoryLoader,
+    TextFileTypeCreator,
+    TextFileTypeLoader,
+)
 
 
 DETAILS_PATH = os.getenv("DETAILS_PATH", "")
@@ -30,3 +37,14 @@ def create_category(name: str) -> str:
 def load_categories() -> List[str]:
     loader = TextFileCategoryLoader(os.path.join(DETAILS_PATH, "categories.txt"))
     return processes.load_categories(loader)
+
+
+def create_type(name: str) -> str:
+    creator = TextFileTypeCreator(os.path.join(DETAILS_PATH, "types.txt"))
+    message = processes.create_type(name, creator)
+    return message
+
+
+def load_types() -> List[str]:
+    loader = TextFileTypeLoader(os.path.join(DETAILS_PATH, "types.txt"))
+    return processes.load_types(loader)

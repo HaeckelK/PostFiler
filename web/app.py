@@ -43,7 +43,7 @@ def upload_file():
             core.save_file_and_record_details(file, filename, details=details)
             return redirect(url_for("upload_file"))
 
-    types = ("statement", "policy", "bill")
+    types = core.load_types()
     categories = core.load_categories()
     default_date = "2021-03"
     return render_template("uploader.html", types=types, categories=categories, default_date=default_date)
@@ -57,4 +57,10 @@ def uploaded_file(filename):
 @app.route("/categories/create/<name>", methods=["GET"])
 def create_category(name):
     message = core.create_category(name)
+    return jsonify(message)
+
+
+@app.route("/types/create/<name>", methods=["GET"])
+def create_type(name):
+    message = core.create_type(name)
     return jsonify(message)

@@ -2,7 +2,7 @@ from typing import Dict, Any, List
 
 from werkzeug.datastructures import FileStorage
 
-from interfaces import FileSaver, FileDetailsRecorder, CategoryCreator, CategoryLoader
+from interfaces import FileSaver, FileDetailsRecorder, CategoryCreator, CategoryLoader, TypeCreator, TypeLoader
 from utils import unix_timestamp
 
 
@@ -34,4 +34,14 @@ def create_category(name: str, creator: CategoryCreator) -> str:
 
 
 def load_categories(loader: CategoryLoader) -> List[str]:
+    return loader.load()
+
+
+def create_type(name: str, creator: TypeCreator) -> str:
+    creator.create(name)
+    message = f"Created type: {name}"
+    return message
+
+
+def load_types(loader: TypeLoader) -> List[str]:
     return loader.load()

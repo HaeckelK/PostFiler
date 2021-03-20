@@ -89,6 +89,47 @@ class TextFileCategoryLoader(CategoryLoader):
 
     def load(self) -> List[str]:
         """"""
-        with open(self.filename, "r") as f:
-            data = f.read().splitlines()
+        try:
+            with open(self.filename, "r") as f:
+                data = f.read().splitlines()
+        except FileNotFoundError:
+            return []
+        return list(set(data))
+
+
+class TypeCreator(ABC):
+    def create(self, name: str) -> None:
+        """"""
+
+
+class TextFileTypeCreator(TypeCreator):
+    def __init__(self, filename: str) -> None:
+        self.filename = filename
+        return
+
+    def create(self, name: str) -> None:
+        """"""
+        with open(self.filename, "a") as f:
+            f.write(name)
+            f.write("\n")
+        return
+
+
+class TypeLoader(ABC):
+    def load(self) -> List[str]:
+        """"""
+
+
+class TextFileTypeLoader(TypeLoader):
+    def __init__(self, filename: str) -> None:
+        self.filename = filename
+        return
+
+    def load(self) -> List[str]:
+        """"""
+        try:
+            with open(self.filename, "r") as f:
+                data = f.read().splitlines()
+        except FileNotFoundError:
+            return []
         return list(set(data))
