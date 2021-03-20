@@ -1,7 +1,7 @@
 import sys
 import os
 
-from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
+from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template, jsonify
 from werkzeug.utils import secure_filename
 
 sys.path.insert(0, "../")
@@ -44,7 +44,7 @@ def upload_file():
             return redirect(url_for("upload_file"))
 
     types = ("statement", "policy", "bill")
-    categories = ("insurance", "mortgage", "tv licence", "council tax", "electricity")
+    categories = core.load_categories()
     default_date = "2021-03"
     return render_template("uploader.html", types=types, categories=categories, default_date=default_date)
 
@@ -52,3 +52,9 @@ def upload_file():
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+
+
+@app.route("/categories/create/<name>", methods=["GET"])
+def create_category(name):
+    message = core.create_category(name)
+    return jsonify(message)

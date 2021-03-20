@@ -1,8 +1,8 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from werkzeug.datastructures import FileStorage
 
-from interfaces import FileSaver, FileDetailsRecorder
+from interfaces import FileSaver, FileDetailsRecorder, CategoryCreator, CategoryLoader
 from utils import unix_timestamp
 
 
@@ -25,3 +25,13 @@ def prepare_file_details(details: Dict[str, Any], filename: str, storage_method:
     details["storage_method"] = storage_method
     details["storage_reference"] = reference
     return details
+
+
+def create_category(name: str, creator: CategoryCreator) -> str:
+    creator.create(name)
+    message = f"Created category: {name}"
+    return message
+
+
+def load_categories(loader: CategoryLoader) -> List[str]:
+    return loader.load()

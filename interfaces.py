@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, List
 import os
 import json
 
@@ -57,3 +57,38 @@ class JSONFileDetailsRecorder(FileDetailsRecorder):
         basename = unix_timestamp()
         filename = os.path.join(self.path, f"{basename}.json")
         return filename
+
+
+class CategoryCreator(ABC):
+    def create(self, name: str) -> None:
+        """"""
+
+
+class TextFileCategoryCreator(CategoryCreator):
+    def __init__(self, filename: str) -> None:
+        self.filename = filename
+        return
+
+    def create(self, name: str) -> None:
+        """"""
+        with open(self.filename, "a") as f:
+            f.write(name)
+            f.write("\n")
+        return
+
+
+class CategoryLoader(ABC):
+    def load(self) -> List[str]:
+        """"""
+
+
+class TextFileCategoryLoader(CategoryLoader):
+    def __init__(self, filename: str) -> None:
+        self.filename = filename
+        return
+
+    def load(self) -> List[str]:
+        """"""
+        with open(self.filename, "r") as f:
+            data = f.read().splitlines()
+        return list(set(data))
