@@ -1,6 +1,11 @@
-import os
-from flask import Flask, flash, request, redirect, url_for, send_from_directory
+import sys
+
+from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
+
+sys.path.insert(0, "../")
+import core  # noqa E402
+
 
 UPLOAD_FOLDER = "../uploads"
 ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
@@ -29,17 +34,16 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-            return redirect(url_for("uploaded_file", filename=filename))
-    return """
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    """
+            details = {}
+            for arg in ("category", "correspondenceType", "correspondenceDate"):
+                details[arg] = request.form[arg]
+            core.save_file_and_record_details(file, filename, details=details)
+            return redirect(url_for("upload_file"))
+
+    types = ("statement", "policy", "bill")
+    categories = ("insurance", "mortgage", "tv licence", "council tax", "electricity")
+    default_date = "2021-03"
+    return render_template("uploader.html", types=types, categories=categories, default_date=default_date)
 
 
 @app.route("/uploads/<filename>")
