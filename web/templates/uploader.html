@@ -1,0 +1,25 @@
+<!doctype html>
+<title>Upload new File</title>
+<h1>Upload new File</h1>
+<form method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <br>
+    <label for="correspondenceType">Type:</label>
+    <select id="correspondenceType" name="correspondenceType">
+        {% for type in types %}
+        <option value="{{type.lower()}}">{{type.title()}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+        {% for category in categories %}
+        <option value="{{category.lower()}}">{{category.title()}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="start">Date:</label>
+    <input type="month" id="correspondenceDate" name="correspondenceDate" value="{{default_date}}">
+    <br>
+    <input type=submit value=Upload>
+</form>
