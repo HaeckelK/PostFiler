@@ -1,4 +1,5 @@
 import sys
+import os
 
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
@@ -12,7 +13,9 @@ ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["SECRET_KEY"] = 1234
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
+assert app.config["SECRET_KEY"] != ""
 
 
 def allowed_file(filename):
