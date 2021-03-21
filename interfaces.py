@@ -37,6 +37,16 @@ class UploadDetails:
         return self.correspondenceDate.split("-")[1][-2:]
 
 
+class LocalFile():
+    def __init__(self, save_path: str) -> None:
+        self.path = save_path
+        return
+
+    def check_root_exists(self) -> None:
+        if os.path.exists(self.path) is False:
+            raise RootDirectoryDoesNotExist
+
+
 class UploadInterface(ABC):
     @abstractmethod
     def save(self, file: FileStorage, filename: str) -> str:
@@ -232,15 +242,10 @@ class FileStorageInterface(ABC):
         """"""
 
 
-class LocalFileStorageInterface(FileStorageInterface):
-    def __init__(self, save_path: str) -> None:
-        self.path = save_path
-        return
-
+class LocalFileStorageInterface(FileStorageInterface, LocalFile):
     def add_file(self, file: bytes, details: UploadDetails) -> str:
         """"""
-        if os.path.exists(self.path) is False:
-            raise RootDirectoryDoesNotExist
+        self.check_root_exists()
         basename = self.create_basename(details)
         filename = os.path.join(self.path, basename)
         with open(filename, "wb") as f:
