@@ -60,10 +60,12 @@ def uploaded_file(filename):
 @app.route("/categories/create/<name>", methods=["GET"])
 def create_category(name):
     message = core.create_category(name)
-    return jsonify(message)
+    flash(message)
+    return redirect(url_for("upload_file"))
 
 
 @app.route("/types/create/<name>", methods=["GET"])
 def create_type(name):
     message = core.create_type(name)
-    return jsonify(message)
+    flash(message)
+    return redirect(url_for("upload_file"))
