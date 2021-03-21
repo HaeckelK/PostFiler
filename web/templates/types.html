@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Type Management{% endblock %}
+{% block content %}
+<h1>Type Management</h1>
+<form action="/types/create" method="get">
+    <label for="name">Add New Type</label>
+    <input type="text" id="name" name="name">
+    <input type="submit" value="Submit" class="btn btn-primary mb-2">
+  </form>
+<table class="table">
+    <tr>
+        <th>Field</th>
+        <th>Action</th>
+    </tr>
+    {% for field in fields %}
+    <tr>
+        <td>{{field}}</td>
+        <td>
+            <a href="/types/delete/{{field}}" class="btn btn-danger mb-2">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
