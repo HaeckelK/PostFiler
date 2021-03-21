@@ -32,13 +32,13 @@ class LocalUploadSaver(UploadSaver):
         return savename
 
 
-class FileDetailsRecorder(ABC):
+class UploadDetailsRecorder(ABC):
     @abstractmethod
     def save(self, details: Dict[str, str]) -> str:
         """"""
 
 
-class JSONFileDetailsRecorder(FileDetailsRecorder):
+class JSONUploadDetailsRecorder(UploadDetailsRecorder):
     def __init__(self, save_path: str) -> None:
         self.path = save_path
         return
