@@ -13,6 +13,7 @@ export FLASK_PORT=5000
 export SECRET_KEY=1234
 export FILES_PATH=
 export DETAILS_PATH=
+export STORAGE_PATH=
 cd web
 flask run --port=$FLASK_PORT
 ```
@@ -24,6 +25,11 @@ export FLASK_PORT=5000
 export SECRET_KEY=
 export FILES_PATH=
 export DETAILS_PATH=
+export STORAGE_PATH=
 cd web
 flask run --port=$FLASK_PORT
 ```
+
+# TODO
+- Uploads with same name
+- Storage transfers with same name
