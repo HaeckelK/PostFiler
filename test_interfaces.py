@@ -45,12 +45,12 @@ def test_local_file_storage_interface_basename(upload_details):
 def test_local_file_storage_interface_add_file_root_directory_not_exist(upload_details, tmpdir):
     storage = LocalFileStorageInterface(os.path.join(tmpdir, "DOES_NOT_EXIST"))
     with pytest.raises(RootDirectoryDoesNotExist):
-        storage.add_file(file=b'', details=upload_details)
+        storage.add_file(file=b"", details=upload_details)
 
 
 def test_local_file_storage_interface_add_file(upload_details, tmpdir):
     os.mkdir(os.path.join(tmpdir, "storage"))
     storage = LocalFileStorageInterface(os.path.join(tmpdir, "storage"))
-    storage.add_file(file=b'', details=upload_details)
+    storage.add_file(file=b"", details=upload_details)
     # TODO doesnt check contents saved
     assert len(os.listdir(os.path.join(tmpdir, "storage"))) == 1

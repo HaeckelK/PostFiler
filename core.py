@@ -7,10 +7,8 @@ import processes
 from interfaces import (
     JSONUploadDetailsRecorder,
     LocalUploadInterface,
-    TextFileCategoryCreator,
-    TextFileCategoryLoader,
-    TextFileTypeCreator,
-    TextFileTypeLoader,
+    TextFileFieldCreator,
+    TextFileFieldLoader,
     LocalFileStorageInterface,
 )
 
@@ -33,25 +31,25 @@ def save_file_and_record_details(file: FileStorage, filename: str, details: Dict
 
 
 def create_category(name: str) -> str:
-    creator = TextFileCategoryCreator(os.path.join(DETAILS_PATH, "categories.txt"))
-    message = processes.create_category(name, creator)
+    creator = TextFileFieldCreator(os.path.join(DETAILS_PATH, "categories.txt"))
+    message = processes.create_field(name, creator)
     return message
 
 
 def load_categories() -> List[str]:
-    loader = TextFileCategoryLoader(os.path.join(DETAILS_PATH, "categories.txt"))
-    return processes.load_categories(loader)
+    loader = TextFileFieldLoader(os.path.join(DETAILS_PATH, "categories.txt"))
+    return processes.load_fields(loader)
 
 
 def create_type(name: str) -> str:
-    creator = TextFileTypeCreator(os.path.join(DETAILS_PATH, "types.txt"))
-    message = processes.create_type(name, creator)
+    creator = TextFileFieldCreator(os.path.join(DETAILS_PATH, "types.txt"))
+    message = processes.create_field(name, creator)
     return message
 
 
 def load_types() -> List[str]:
-    loader = TextFileTypeLoader(os.path.join(DETAILS_PATH, "types.txt"))
-    return processes.load_types(loader)
+    loader = TextFileFieldLoader(os.path.join(DETAILS_PATH, "types.txt"))
+    return processes.load_fields(loader)
 
 
 def transfer_uploads_to_storage() -> None:

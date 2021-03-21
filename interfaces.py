@@ -37,7 +37,7 @@ class UploadDetails:
         return self.correspondenceDate.split("-")[1][-2:]
 
 
-class LocalFile():
+class LocalFile:
     def __init__(self, save_path: str) -> None:
         self.path = save_path
         return
@@ -160,12 +160,12 @@ class JSONUploadDetailsRecorder(UploadDetailsRecorder):
         return details
 
 
-class CategoryCreator(ABC):
+class FieldCreator(ABC):
     def create(self, name: str) -> None:
         """"""
 
 
-class TextFileCategoryCreator(CategoryCreator):
+class TextFileFieldCreator(FieldCreator):
     def __init__(self, filename: str) -> None:
         self.filename = filename
         return
@@ -178,50 +178,12 @@ class TextFileCategoryCreator(CategoryCreator):
         return
 
 
-class CategoryLoader(ABC):
+class FieldLoader(ABC):
     def load(self) -> List[str]:
         """"""
 
 
-class TextFileCategoryLoader(CategoryLoader):
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
-        return
-
-    def load(self) -> List[str]:
-        """"""
-        try:
-            with open(self.filename, "r") as f:
-                data = f.read().splitlines()
-        except FileNotFoundError:
-            return []
-        return list(set(data))
-
-
-class TypeCreator(ABC):
-    def create(self, name: str) -> None:
-        """"""
-
-
-class TextFileTypeCreator(TypeCreator):
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
-        return
-
-    def create(self, name: str) -> None:
-        """"""
-        with open(self.filename, "a") as f:
-            f.write(name)
-            f.write("\n")
-        return
-
-
-class TypeLoader(ABC):
-    def load(self) -> List[str]:
-        """"""
-
-
-class TextFileTypeLoader(TypeLoader):
+class TextFileFieldLoader(FieldLoader):
     def __init__(self, filename: str) -> None:
         self.filename = filename
         return
