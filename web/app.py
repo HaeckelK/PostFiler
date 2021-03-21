@@ -41,10 +41,13 @@ def upload_file():
             for arg in ("category", "correspondenceType", "correspondenceDate"):
                 details[arg] = request.form[arg]
             core.save_file_and_record_details(file, filename, details=details)
+            core.transfer_uploads_to_storage()
+            flash("File uploaded")
             return redirect(url_for("upload_file"))
 
     types = core.load_types()
     categories = core.load_categories()
+    # TODO update with current month
     default_date = "2021-03"
     return render_template("uploader.html", types=types, categories=categories, default_date=default_date)
 
