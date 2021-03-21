@@ -95,7 +95,7 @@ class LocalUploadInterface(UploadInterface):
 
     def save(self, file: FileStorage, filename: str) -> str:
         """"""
-        savename = os.path.join(self.path, filename)
+        savename = os.path.join(self.path, str(unix_timestamp()) + filename)
         file.save(savename)
         return savename
 

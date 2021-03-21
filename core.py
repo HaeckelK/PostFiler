@@ -55,6 +55,11 @@ def load_types() -> List[str]:
 def transfer_uploads_to_storage() -> None:
     upload_interface = LocalUploadInterface(FILES_PATH)
     storage_writer = LocalFileStorageInterface(STORAGE_PATH)
-    details_loader = JSONUploadDetailsRecorder(save_path=DETAILS_PATH)
+    details_loader = JSONUploadDetailsRecorder(save_path=os.path.join(DETAILS_PATH, "file_details"))
     processes.transfer_uploads_to_storage(upload_interface, storage_writer, details_loader)
+    return
+
+
+def initial_setup():
+    os.mkdir(os.path.join(DETAILS_PATH, "file_details"))
     return
