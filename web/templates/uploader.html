@@ -1,25 +1,27 @@
-<!doctype html>
-<title>Upload new File</title>
+{% extends "base.html" %}
+{% block title %}Upload new File{% endblock %}
+{% block content %}
 <h1>Upload new File</h1>
 <form method=post enctype=multipart/form-data>
-    <input type=file name=file>
+    <input type=file class="form-control-file" name=file>
     <br>
     <label for="correspondenceType">Type:</label>
-    <select id="correspondenceType" name="correspondenceType">
+    <select class="form-control" id="correspondenceType" name="correspondenceType">
         {% for type in types %}
         <option value="{{type.lower()}}">{{type.title()}}</option>
         {% endfor %}
     </select>
     <br>
     <label for="category">Category:</label>
-    <select id="category" name="category">
+    <select class="form-control" id="category" name="category">
         {% for category in categories %}
         <option value="{{category.lower()}}">{{category.title()}}</option>
         {% endfor %}
     </select>
     <br>
     <label for="start">Date:</label>
-    <input type="month" id="correspondenceDate" name="correspondenceDate" value="{{default_date}}">
+    <input type="month" class="form-control" id="correspondenceDate" name="correspondenceDate" value="{{default_date}}">
     <br>
-    <input type=submit value=Upload>
+    <input type=submit class="btn btn-primary mb-2" value=Upload>
 </form>
+{% endblock %}
