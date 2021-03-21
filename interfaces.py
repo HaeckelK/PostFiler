@@ -8,19 +8,19 @@ from werkzeug.datastructures import FileStorage
 from utils import unix_timestamp
 
 
-class FileSaver(ABC):
+class UploadSaver(ABC):
     @abstractmethod
     def save(self, file: FileStorage, filename: str) -> str:
         """"""
 
 
-class NullFileSaver(FileSaver):
+class NullUploadSaver(UploadSaver):
     def save(self, file: FileStorage, filename: str) -> str:
         """Do nothing."""
         return "none"
 
 
-class LocalFileSaver(FileSaver):
+class LocalUploadSaver(UploadSaver):
     def __init__(self, save_path: str) -> None:
         self.path = save_path
         return

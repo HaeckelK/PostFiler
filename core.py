@@ -6,7 +6,7 @@ from werkzeug.datastructures import FileStorage
 import processes
 from interfaces import (
     JSONFileDetailsRecorder,
-    LocalFileSaver,
+    LocalUploadSaver,
     TextFileCategoryCreator,
     TextFileCategoryLoader,
     TextFileTypeCreator,
@@ -16,13 +16,16 @@ from interfaces import (
 
 DETAILS_PATH = os.getenv("DETAILS_PATH", "")
 FILES_PATH = os.getenv("FILES_PATH", "")
+STORAGE_PATH = os.getenv("STORAGE_PATH", "")
+
 
 assert DETAILS_PATH != ""
 assert FILES_PATH != ""
+assert STORAGE_PATH != ""
 
 
 def save_file_and_record_details(file: FileStorage, filename: str, details: Dict[str, str]) -> None:
-    file_saver = LocalFileSaver(FILES_PATH)
+    file_saver = LocalUploadSaver(FILES_PATH)
     details_recorder = JSONFileDetailsRecorder(save_path=DETAILS_PATH)
     processes.save_file_and_record_details(file, filename, details, file_saver, details_recorder)
     return
@@ -48,3 +51,7 @@ def create_type(name: str) -> str:
 def load_types() -> List[str]:
     loader = TextFileTypeLoader(os.path.join(DETAILS_PATH, "types.txt"))
     return processes.load_types(loader)
+
+
+def transfer_uploads_to_storage() -> None:
+    return

@@ -2,7 +2,7 @@ from typing import Dict, Any, List
 
 from werkzeug.datastructures import FileStorage
 
-from interfaces import FileSaver, FileDetailsRecorder, CategoryCreator, CategoryLoader, TypeCreator, TypeLoader
+from interfaces import UploadSaver, FileDetailsRecorder, CategoryCreator, CategoryLoader, TypeCreator, TypeLoader
 from utils import unix_timestamp
 
 
@@ -10,7 +10,7 @@ def save_file_and_record_details(
     file: FileStorage,
     filename: str,
     details: Dict[str, Any],
-    file_saver: FileSaver,
+    file_saver: UploadSaver,
     details_recorder: FileDetailsRecorder,
 ) -> None:
     reference = file_saver.save(file, filename)
@@ -45,3 +45,7 @@ def create_type(name: str, creator: TypeCreator) -> str:
 
 def load_types(loader: TypeLoader) -> List[str]:
     return loader.load()
+
+
+def transfer_uploads_to_storage() -> None:
+    return
