@@ -9,6 +9,10 @@ from werkzeug.datastructures import FileStorage
 from utils import unix_timestamp
 
 
+class RootDirectoryDoesNotExist(Exception):
+    pass
+
+
 @dataclass
 class UploadDetails:
     category: str
@@ -235,6 +239,8 @@ class LocalFileStorageInterface(FileStorageInterface):
 
     def add_file(self, file: bytes, details: UploadDetails) -> str:
         """"""
+        if os.path.exists(self.path) is False:
+            raise RootDirectoryDoesNotExist
         basename = self.create_basename(details)
         filename = os.path.join(self.path, basename)
         with open(filename, "wb") as f:
