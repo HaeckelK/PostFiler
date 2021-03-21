@@ -90,12 +90,16 @@ class NullUploadInterface(UploadInterface):
 
 class LocalUploadInterface(UploadInterface):
     def __init__(self, save_path: str) -> None:
-        self.path = save_path
+        self.unprocessed_path = os.path.join(save_path, "unprocessed")
+        self.processed_path = os.path.join(save_path, "processed")
+        for directory in (self.processed_path, self.unprocessed_path):
+            if not os.path.exists(directory):
+                os.mkdir(directory)
         return
 
     def save(self, file: FileStorage, filename: str) -> str:
         """"""
-        savename = os.path.join(self.path, str(unix_timestamp()) + filename)
+        savename = os.path.join(self.unprocessed_path, str(unix_timestamp()) + filename)
         file.save(savename)
         return savename
 
@@ -104,7 +108,7 @@ class LocalUploadInterface(UploadInterface):
 
     def get_unprocessed_references(self) -> List[str]:
         """"""
-        return [os.path.join(self.path, x) for x in os.listdir(self.path)]
+        return [os.path.join(self.unprocessed_path, x) for x in os.listdir(self.unprocessed_path)]
 
     def load_file(self, reference: str) -> bytes:
         """"""
