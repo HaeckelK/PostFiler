@@ -1,12 +1,17 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Generator, Tuple
 import os
+import shutil
 import json
 from dataclasses import dataclass
 
 from werkzeug.datastructures import FileStorage
 
 from utils import unix_timestamp
+
+
+class RootDirectoryDoesNotExist(Exception):
+    pass
 
 
 @dataclass
@@ -31,6 +36,16 @@ class UploadDetails:
     @property
     def month(self) -> str:
         return self.correspondenceDate.split("-")[1][-2:]
+
+
+class LocalFile:
+    def __init__(self, save_path: str) -> None:
+        self.path = save_path
+        return
+
+    def check_root_exists(self) -> None:
+        if os.path.exists(self.path) is False:
+            raise RootDirectoryDoesNotExist
 
 
 class UploadInterface(ABC):
@@ -76,21 +91,29 @@ class NullUploadInterface(UploadInterface):
 
 class LocalUploadInterface(UploadInterface):
     def __init__(self, save_path: str) -> None:
-        self.path = save_path
+        self.unprocessed_path = os.path.join(save_path, "unprocessed")
+        self.processed_path = os.path.join(save_path, "processed")
+        for directory in (self.processed_path, self.unprocessed_path):
+            if not os.path.exists(directory):
+                os.mkdir(directory)
         return
 
     def save(self, file: FileStorage, filename: str) -> str:
         """"""
-        savename = os.path.join(self.path, filename)
+        savename = os.path.join(self.unprocessed_path, str(unix_timestamp()) + filename)
         file.save(savename)
         return savename
 
     def remove_file(self, reference: str) -> None:
+        """Move file into a processed folder."""
+        basename = os.path.basename(reference)
+        newname = os.path.join(self.processed_path, basename)
+        shutil.move(reference, newname)
         return
 
     def get_unprocessed_references(self) -> List[str]:
         """"""
-        return [os.path.join(self.path, x) for x in os.listdir(self.path)]
+        return [os.path.join(self.unprocessed_path, x) for x in os.listdir(self.unprocessed_path)]
 
     def load_file(self, reference: str) -> bytes:
         """"""
@@ -146,12 +169,12 @@ class JSONUploadDetailsRecorder(UploadDetailsRecorder):
         return details
 
 
-class CategoryCreator(ABC):
+class FieldCreator(ABC):
     def create(self, name: str) -> None:
         """"""
 
 
-class TextFileCategoryCreator(CategoryCreator):
+class TextFileFieldCreator(FieldCreator):
     def __init__(self, filename: str) -> None:
         self.filename = filename
         return
@@ -164,50 +187,12 @@ class TextFileCategoryCreator(CategoryCreator):
         return
 
 
-class CategoryLoader(ABC):
+class FieldLoader(ABC):
     def load(self) -> List[str]:
         """"""
 
 
-class TextFileCategoryLoader(CategoryLoader):
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
-        return
-
-    def load(self) -> List[str]:
-        """"""
-        try:
-            with open(self.filename, "r") as f:
-                data = f.read().splitlines()
-        except FileNotFoundError:
-            return []
-        return list(set(data))
-
-
-class TypeCreator(ABC):
-    def create(self, name: str) -> None:
-        """"""
-
-
-class TextFileTypeCreator(TypeCreator):
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
-        return
-
-    def create(self, name: str) -> None:
-        """"""
-        with open(self.filename, "a") as f:
-            f.write(name)
-            f.write("\n")
-        return
-
-
-class TypeLoader(ABC):
-    def load(self) -> List[str]:
-        """"""
-
-
-class TextFileTypeLoader(TypeLoader):
+class TextFileFieldLoader(FieldLoader):
     def __init__(self, filename: str) -> None:
         self.filename = filename
         return
@@ -228,13 +213,10 @@ class FileStorageInterface(ABC):
         """"""
 
 
-class LocalFileStorageInterface(FileStorageInterface):
-    def __init__(self, save_path: str) -> None:
-        self.path = save_path
-        return
-
+class LocalFileStorageInterface(FileStorageInterface, LocalFile):
     def add_file(self, file: bytes, details: UploadDetails) -> str:
         """"""
+        self.check_root_exists()
         basename = self.create_basename(details)
         filename = os.path.join(self.path, basename)
         with open(filename, "wb") as f:
