@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Generator, Tuple
 import os
+import shutil
 import json
 from dataclasses import dataclass
 
@@ -104,6 +105,10 @@ class LocalUploadInterface(UploadInterface):
         return savename
 
     def remove_file(self, reference: str) -> None:
+        """Move file into a processed folder."""
+        basename = os.path.basename(reference)
+        newname = os.path.join(self.processed_path, basename)
+        shutil.move(reference, newname)
         return
 
     def get_unprocessed_references(self) -> List[str]:
