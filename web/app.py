@@ -52,20 +52,48 @@ def upload_file():
     return render_template("uploader.html", types=types, categories=categories, default_date=default_date)
 
 
+@app.route("/types", methods=["GET"])
+def type_management():
+    fields = core.load_types()
+    return render_template("types.html", fields=fields)
+
+
+@app.route("/categories", methods=["GET"])
+def category_management():
+    fields = core.load_categories()
+    return render_template("categories.html", fields=fields)
+
+
+@app.route("/types/delete/<name>", methods=["GET"])
+def type_delete(name):
+    flash(f"delete goes here for: {name}")
+    return redirect(url_for("type_management"))
+
+
+@app.route("/categories/delete/<name>", methods=["GET"])
+def category_delete(name):
+    flash(f"delete goes here for: {name}")
+    return redirect(url_for("category_management"))
+
+
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
-@app.route("/categories/create/<name>", methods=["GET"])
-def create_category(name):
-    message = core.create_category(name)
-    flash(message)
-    return redirect(url_for("upload_file"))
+@app.route("/categories/create", methods=["GET"])
+def create_category():
+    name = request.args.get("name", "")
+    if name != "":
+        message = core.create_type(name)
+        flash(message)
+    return redirect(url_for("category_management"))
 
 
-@app.route("/types/create/<name>", methods=["GET"])
-def create_type(name):
-    message = core.create_type(name)
-    flash(message)
-    return redirect(url_for("upload_file"))
+@app.route("/types/create", methods=["GET"])
+def create_type():
+    name = request.args.get("name", "")
+    if name != "":
+        message = core.create_type(name)
+        flash(message)
+    return redirect(url_for("type_management"))
