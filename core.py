@@ -7,8 +7,8 @@ import processes
 from interfaces import (
     JSONUploadDetailsRecorder,
     LocalUploadInterface,
-    TextFileFieldCreator,
-    TextFileFieldLoader,
+    FieldInterface,
+    TextFileFieldInterface,
     LocalFileStorageInterface,
 )
 
@@ -33,25 +33,33 @@ def save_file_and_record_details(file: FileStorage, filename: str, details: Dict
     return
 
 
+def get_category_interface() -> FieldInterface:
+    return TextFileFieldInterface(os.path.join(CONFIG_PATH, "categories.txt"))
+
+
+def get_type_interface() -> FieldInterface:
+    return TextFileFieldInterface(os.path.join(CONFIG_PATH, "types.txt"))
+
+
 def create_category(name: str) -> str:
-    creator = TextFileFieldCreator(os.path.join(CONFIG_PATH, "categories.txt"))
+    creator = TextFileFieldInterface(os.path.join(CONFIG_PATH, "categories.txt"))
     message = processes.create_field(name, creator)
     return message
 
 
 def load_categories() -> List[str]:
-    loader = TextFileFieldLoader(os.path.join(CONFIG_PATH, "categories.txt"))
+    loader = TextFileFieldInterface(os.path.join(CONFIG_PATH, "categories.txt"))
     return processes.load_fields(loader)
 
 
 def create_type(name: str) -> str:
-    creator = TextFileFieldCreator(os.path.join(CONFIG_PATH, "types.txt"))
+    creator = TextFileFieldInterface(os.path.join(CONFIG_PATH, "types.txt"))
     message = processes.create_field(name, creator)
     return message
 
 
 def load_types() -> List[str]:
-    loader = TextFileFieldLoader(os.path.join(CONFIG_PATH, "types.txt"))
+    loader = TextFileFieldInterface(os.path.join(CONFIG_PATH, "types.txt"))
     return processes.load_fields(loader)
 
 

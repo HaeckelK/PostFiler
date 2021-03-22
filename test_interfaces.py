@@ -2,7 +2,12 @@ import os
 
 import pytest  # noqa F401
 
-from interfaces import UploadDetails, LocalFileStorageInterface, RootDirectoryDoesNotExist
+from interfaces import (
+    UploadDetails,
+    LocalFileStorageInterface,
+    RootDirectoryDoesNotExist,
+    TextFileFieldInterface,
+)
 
 
 @pytest.fixture
@@ -54,3 +59,40 @@ def test_local_file_storage_interface_add_file(upload_details, tmpdir):
     storage.add_file(file=b"", details=upload_details)
     # TODO doesnt check contents saved
     assert len(os.listdir(os.path.join(tmpdir, "storage"))) == 1
+
+
+def test_text_file_field_loader_empty(tmpdir):
+    loader = TextFileFieldInterface(os.path.join(tmpdir, "fields.txt"))
+    assert loader.load() == []
+
+
+def test_text_file_field_loader_non_empty(tmpdir):
+    # Given empty field data
+    filename = os.path.join(tmpdir, "fields.txt")
+    field_interface = TextFileFieldInterface(filename)
+    # When a new field has been created
+    field_interface.create("new_field")
+    # Then present loader.load
+    assert field_interface.load() == ["new_field"]
+
+
+def test_text_file_field_creator_multiple(tmpdir):
+    # Given empty field data
+    filename = os.path.join(tmpdir, "fields.txt")
+    field_interface = TextFileFieldInterface(filename)
+    # When a new field has been created twice
+    field_interface.create("new_field")
+    field_interface.create("new_field")
+    # Then present loader.load once
+    assert field_interface.load() == ["new_field"]
+
+
+def test_text_file_field_delete(tmpdir):
+    # Given a non empty field data
+    filename = os.path.join(tmpdir, "fields.txt")
+    field_interface = TextFileFieldInterface(filename)
+    field_interface.create("new_field")
+    # When field deleted
+    field_interface.delete("new_field")
+    # Then not in load
+    assert field_interface.load() == []

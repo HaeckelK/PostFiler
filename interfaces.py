@@ -4,6 +4,7 @@ import os
 import shutil
 import json
 from dataclasses import dataclass
+import re
 
 from werkzeug.datastructures import FileStorage
 
@@ -169,12 +170,21 @@ class JSONUploadDetailsRecorder(UploadDetailsRecorder):
         return details
 
 
-class FieldCreator(ABC):
+class FieldInterface(ABC):
+    @abstractmethod
     def create(self, name: str) -> None:
         """"""
 
+    @abstractmethod
+    def load(self) -> List[str]:
+        """"""
 
-class TextFileFieldCreator(FieldCreator):
+    @abstractmethod
+    def delete(self, name: str) -> None:
+        """"""
+
+
+class TextFileFieldInterface(FieldInterface):
     def __init__(self, filename: str) -> None:
         self.filename = filename
         return
@@ -186,17 +196,6 @@ class TextFileFieldCreator(FieldCreator):
             f.write("\n")
         return
 
-
-class FieldLoader(ABC):
-    def load(self) -> List[str]:
-        """"""
-
-
-class TextFileFieldLoader(FieldLoader):
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
-        return
-
     def load(self) -> List[str]:
         """"""
         try:
@@ -204,7 +203,18 @@ class TextFileFieldLoader(FieldLoader):
                 data = f.read().splitlines()
         except FileNotFoundError:
             return []
+        data = [x for x in data if x != ""]
         return list(set(data))
+
+    def delete(self, name: str) -> None:
+        with open(self.filename, "r") as f:
+            data = f.read()
+        regex = r"^" + name + "$"
+        subst = ""
+        result = re.sub(regex, subst, data, 0, re.MULTILINE)
+        with open(self.filename, "w") as f:
+            f.write(result)
+        return
 
 
 class FileStorageInterface(ABC):
