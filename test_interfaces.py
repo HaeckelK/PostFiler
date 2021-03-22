@@ -2,7 +2,13 @@ import os
 
 import pytest  # noqa F401
 
-from interfaces import UploadDetails, LocalFileStorageInterface, RootDirectoryDoesNotExist, TextFileFieldLoader, TextFileFieldCreator
+from interfaces import (
+    UploadDetails,
+    LocalFileStorageInterface,
+    RootDirectoryDoesNotExist,
+    TextFileFieldLoader,
+    TextFileFieldCreator,
+)
 
 
 @pytest.fixture
