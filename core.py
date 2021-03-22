@@ -7,6 +7,7 @@ import processes
 from interfaces import (
     JSONUploadDetailsRecorder,
     LocalUploadInterface,
+    FieldInterface,
     TextFileFieldInterface,
     LocalFileStorageInterface,
 )
@@ -30,6 +31,14 @@ def save_file_and_record_details(file: FileStorage, filename: str, details: Dict
     details_recorder = JSONUploadDetailsRecorder(save_path=DETAILS_PATH)
     processes.save_file_and_record_details(file, filename, details, file_saver, details_recorder)
     return
+
+
+def get_category_interface() -> FieldInterface:
+    return TextFileFieldInterface(os.path.join(CONFIG_PATH, "categories.txt"))
+
+
+def get_type_interface() -> FieldInterface:
+    return TextFileFieldInterface(os.path.join(CONFIG_PATH, "types.txt"))
 
 
 def create_category(name: str) -> str:
