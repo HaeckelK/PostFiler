@@ -5,8 +5,7 @@ from werkzeug.datastructures import FileStorage
 from interfaces import (
     UploadInterface,
     UploadDetailsRecorder,
-    FieldLoader,
-    FieldCreator,
+    FieldInterface,
     FileStorageInterface,
 )
 from utils import unix_timestamp
@@ -33,13 +32,13 @@ def prepare_file_details(details: Dict[str, Any], filename: str, storage_method:
     return details
 
 
-def create_field(name: str, creator: FieldCreator) -> str:
+def create_field(name: str, creator: FieldInterface) -> str:
     creator.create(name)
     message = f"Created category: {name}"
     return message
 
 
-def load_fields(loader: FieldLoader) -> List[str]:
+def load_fields(loader: FieldInterface) -> List[str]:
     return loader.load()
 
 

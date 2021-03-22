@@ -6,8 +6,7 @@ from interfaces import (
     UploadDetails,
     LocalFileStorageInterface,
     RootDirectoryDoesNotExist,
-    TextFileFieldLoader,
-    TextFileFieldCreator,
+    TextFileFieldInterface,
 )
 
 
@@ -63,28 +62,26 @@ def test_local_file_storage_interface_add_file(upload_details, tmpdir):
 
 
 def test_text_file_field_loader_empty(tmpdir):
-    loader = TextFileFieldLoader(os.path.join(tmpdir, "fields.txt"))
+    loader = TextFileFieldInterface(os.path.join(tmpdir, "fields.txt"))
     assert loader.load() == []
 
 
 def test_text_file_field_loader_non_empty(tmpdir):
     # Given empty field data
     filename = os.path.join(tmpdir, "fields.txt")
-    creator = TextFileFieldCreator(filename)
-    loader = TextFileFieldLoader(filename)
+    field_interface = TextFileFieldInterface(filename)
     # When a new field has been created
-    creator.create("new_field")
+    field_interface.create("new_field")
     # Then present loader.load
-    assert loader.load() == ["new_field"]
+    assert field_interface.load() == ["new_field"]
 
 
 def test_text_file_field_creator_multiple(tmpdir):
     # Given empty field data
     filename = os.path.join(tmpdir, "fields.txt")
-    creator = TextFileFieldCreator(filename)
-    loader = TextFileFieldLoader(filename)
+    field_interface = TextFileFieldInterface(filename)
     # When a new field has been created twice
-    creator.create("new_field")
-    creator.create("new_field")
+    field_interface.create("new_field")
+    field_interface.create("new_field")
     # Then present loader.load once
-    assert loader.load() == ["new_field"]
+    assert field_interface.load() == ["new_field"]

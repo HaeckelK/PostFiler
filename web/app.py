@@ -1,7 +1,7 @@
 import sys
 import os
 
-from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template, jsonify
+from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 
 sys.path.insert(0, "../")

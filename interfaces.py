@@ -169,12 +169,17 @@ class JSONUploadDetailsRecorder(UploadDetailsRecorder):
         return details
 
 
-class FieldCreator(ABC):
+class FieldInterface(ABC):
+    @abstractmethod
     def create(self, name: str) -> None:
         """"""
 
+    @abstractmethod
+    def load(self) -> List[str]:
+        """"""
 
-class TextFileFieldCreator(FieldCreator):
+
+class TextFileFieldInterface(FieldInterface):
     def __init__(self, filename: str) -> None:
         self.filename = filename
         return
@@ -184,17 +189,6 @@ class TextFileFieldCreator(FieldCreator):
         with open(self.filename, "a") as f:
             f.write(name)
             f.write("\n")
-        return
-
-
-class FieldLoader(ABC):
-    def load(self) -> List[str]:
-        """"""
-
-
-class TextFileFieldLoader(FieldLoader):
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
         return
 
     def load(self) -> List[str]:
