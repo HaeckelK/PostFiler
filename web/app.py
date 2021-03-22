@@ -66,13 +66,17 @@ def category_management():
 
 @app.route("/types/delete/<name>", methods=["GET"])
 def type_delete(name):
-    flash(f"delete goes here for: {name}")
+    interface = core.get_type_interface()
+    interface.delete(name)
+    flash(f"deleted type: {name}")
     return redirect(url_for("type_management"))
 
 
 @app.route("/categories/delete/<name>", methods=["GET"])
 def category_delete(name):
-    flash(f"delete goes here for: {name}")
+    interface = core.get_category_interface()
+    interface.delete(name)
+    flash(f"deleted category: {name}")
     return redirect(url_for("category_management"))
 
 
@@ -85,7 +89,7 @@ def uploaded_file(filename):
 def create_category():
     name = request.args.get("name", "")
     if name != "":
-        message = core.create_type(name)
+        message = core.create_category(name)
         flash(message)
     return redirect(url_for("category_management"))
 

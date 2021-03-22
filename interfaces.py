@@ -4,6 +4,7 @@ import os
 import shutil
 import json
 from dataclasses import dataclass
+import re
 
 from werkzeug.datastructures import FileStorage
 
@@ -178,6 +179,10 @@ class FieldInterface(ABC):
     def load(self) -> List[str]:
         """"""
 
+    @abstractmethod
+    def delete(self, name: str) -> None:
+        """"""
+
 
 class TextFileFieldInterface(FieldInterface):
     def __init__(self, filename: str) -> None:
@@ -198,7 +203,18 @@ class TextFileFieldInterface(FieldInterface):
                 data = f.read().splitlines()
         except FileNotFoundError:
             return []
+        data = [x for x in data if x != ""]
         return list(set(data))
+
+    def delete(self, name: str) -> None:
+        with open(self.filename, "r") as f:
+            data = f.read()
+        regex = r"^" + name + "$"
+        subst = ""
+        result = re.sub(regex, subst, data, 0, re.MULTILINE)
+        with open(self.filename, "w") as f:
+            f.write(result)
+        return
 
 
 class FileStorageInterface(ABC):

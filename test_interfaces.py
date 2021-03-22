@@ -85,3 +85,14 @@ def test_text_file_field_creator_multiple(tmpdir):
     field_interface.create("new_field")
     # Then present loader.load once
     assert field_interface.load() == ["new_field"]
+
+
+def test_text_file_field_delete(tmpdir):
+    # Given a non empty field data
+    filename = os.path.join(tmpdir, "fields.txt")
+    field_interface = TextFileFieldInterface(filename)
+    field_interface.create("new_field")
+    # When field deleted
+    field_interface.delete("new_field")
+    # Then not in load
+    assert field_interface.load() == []
