@@ -1,0 +1,6 @@
+insurance
+mortgage
+tv licence
+council tax
+electricity
+water
