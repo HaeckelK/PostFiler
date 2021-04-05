@@ -14,4 +14,5 @@ COPY ./processes.py .
 COPY ./utils.py .
 COPY ./categories.txt /app/data/details/config/
 COPY ./types.txt /app/data/details/config/
+ENV PYTHONUNBUFFERED=1
 CMD cd web && gunicorn --bind 0.0.0.0:$FLASK_PORT app:app

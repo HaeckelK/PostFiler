@@ -166,6 +166,8 @@ class JSONUploadDetailsRecorder(UploadDetailsRecorder):
                 found = True
                 break
         if found is False:
+            # TODO this TypeError must be caught and logged, otherwise missing details will mean the file can
+            # never be processed, and the system will never get past this point.
             raise TypeError
         return details
 
