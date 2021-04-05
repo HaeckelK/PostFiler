@@ -3,7 +3,8 @@ COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY ./app ./app
 WORKDIR app
-RUN mkdir -p ./data ./uploads/processed ./uploads/unprocessed ./data/details/file_details ./storage
+RUN mkdir -p ./data ./uploads/processed ./uploads/unprocessed \
+./data/details/file_details ./data/details/config ./storage
 COPY ./example.categories.txt /app/data/details/config/categories.txt
 COPY ./example.types.txt /app/data/details/config/types.txt
 ENV PYTHONUNBUFFERED=1
