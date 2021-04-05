@@ -9,4 +9,4 @@ COPY ./interfaces.py .
 COPY ./processes.py .
 COPY ./utils.py .
 # CMD gunicorn "app:create_app()" --bind 0.0.0.0:$PORT
-CMD cd web && flask run --port=$FLASK_PORT
+CMD cd web && flask run --port=$FLASK_PORT --host=0.0.0.0
