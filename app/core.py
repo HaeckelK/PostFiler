@@ -63,12 +63,12 @@ def load_types() -> List[str]:
     return processes.load_fields(loader)
 
 
-def transfer_uploads_to_storage() -> None:
+def transfer_uploads_to_storage() -> str:
     upload_interface = LocalUploadInterface(FILES_PATH)
     storage_writer = LocalFileStorageInterface(STORAGE_PATH)
     details_loader = JSONUploadDetailsRecorder(save_path=DETAILS_PATH)
-    processes.transfer_uploads_to_storage(upload_interface, storage_writer, details_loader)
-    return
+    newname = processes.transfer_uploads_to_storage(upload_interface, storage_writer, details_loader)
+    return newname
 
 
 def initial_setup():

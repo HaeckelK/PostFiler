@@ -44,10 +44,10 @@ def load_fields(loader: FieldInterface) -> List[str]:
 
 def transfer_uploads_to_storage(
     upload_interface: UploadInterface, storage_writer: FileStorageInterface, details_loader: UploadDetailsRecorder
-) -> None:
+) -> str:
     # TODO record that this has taken place
     for reference, file_data in upload_interface.unprocessed_uploads():
         details = details_loader.get_details(reference)
-        storage_writer.add_file(file_data, details=details)
+        newname = storage_writer.add_file(file_data, details=details)
         upload_interface.remove_file(reference)
-    return
+    return newname
