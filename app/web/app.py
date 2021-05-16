@@ -101,3 +101,9 @@ def create_type():
         message = core.create_type(name)
         flash(message)
     return redirect(url_for("type_management"))
+
+
+@app.route("/files", methods=["GET"])
+def list_files():
+    files = core.load_details_of_all_files()
+    return render_template("files.html", files=files)
