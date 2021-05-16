@@ -1,5 +1,6 @@
 import sys
 import os
+from datetime import datetime
 
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
@@ -47,8 +48,7 @@ def upload_file():
 
     types = core.load_types()
     categories = core.load_categories()
-    # TODO update with current month
-    default_date = "2021-03"
+    default_date = datetime.today().strftime('%Y-%m')
     return render_template("uploader.html", types=types, categories=categories, default_date=default_date)
 
 
