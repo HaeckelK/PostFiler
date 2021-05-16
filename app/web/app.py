@@ -41,7 +41,7 @@ def upload_file():
             for arg in ("category", "correspondenceType", "correspondenceDate"):
                 details[arg] = request.form[arg]
             core.save_file_and_record_details(file, filename, details=details)
-            newname = core.transfer_uploads_to_storage().split('\\')[-1]
+            newname = core.transfer_uploads_to_storage().split("\\")[-1]
             flash(f"File uploaded: {newname}")
             return redirect(url_for("upload_file"))
 
