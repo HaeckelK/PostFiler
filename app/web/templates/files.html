@@ -13,7 +13,7 @@
     <tbody>
         {% for file in files %}
       <tr>
-        <td>{{file.category}}</td>
+        <td><a href="{{file.href}}">{{file.category}}</a></td>
         <td>{{file.correspondenceType}}</td>
         <td>{{file.correspondenceDate}}</td>
       </tr>

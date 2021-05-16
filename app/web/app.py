@@ -106,4 +106,14 @@ def create_type():
 @app.route("/files", methods=["GET"])
 def list_files():
     files = core.load_details_of_all_files()
+    # TODO basename should come from a storage loaded and be added in during processes.py
+    for f in files:
+        basename = f.year + f.month + "_" + f.category + "_" + f.correspondenceType + f.extension
+        f.href = "file/" + basename
     return render_template("files.html", files=files)
+
+
+@app.route("/file/<filename>")
+def stored_file(filename):
+    folder = os.environ.get("STORAGE_PATH", "")
+    return send_from_directory(folder, filename)
