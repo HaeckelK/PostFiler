@@ -41,7 +41,7 @@ def upload_file():
             for arg in ("category", "correspondenceType", "correspondenceDate"):
                 details[arg] = request.form[arg]
             core.save_file_and_record_details(file, filename, details=details)
-            newname = core.transfer_uploads_to_storage().split('\\')[-1]
+            newname = core.transfer_uploads_to_storage().split("\\")[-1]
             flash(f"File uploaded: {newname}")
             return redirect(url_for("upload_file"))
 
@@ -101,3 +101,19 @@ def create_type():
         message = core.create_type(name)
         flash(message)
     return redirect(url_for("type_management"))
+
+
+@app.route("/files", methods=["GET"])
+def list_files():
+    files = core.load_details_of_all_files()
+    # TODO basename should come from a storage loaded and be added in during processes.py
+    for f in files:
+        basename = f.year + f.month + "_" + f.category + "_" + f.correspondenceType + f.extension
+        f.href = "file/" + basename
+    return render_template("files.html", files=files)
+
+
+@app.route("/file/<filename>")
+def stored_file(filename):
+    folder = os.environ.get("STORAGE_PATH", "")
+    return send_from_directory(folder, filename)

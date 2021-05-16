@@ -7,6 +7,7 @@ from interfaces import (
     UploadDetailsRecorder,
     FieldInterface,
     FileStorageInterface,
+    UploadDetails,
 )
 from utils import unix_timestamp
 
@@ -51,3 +52,9 @@ def transfer_uploads_to_storage(
         newname = storage_writer.add_file(file_data, details=details)
         upload_interface.remove_file(reference)
     return newname
+
+
+def load_details_of_all_files(details_loader: UploadDetailsRecorder) -> List[UploadDetails]:
+    # TODO allow pagination
+    details = details_loader.get_details_all()
+    return details

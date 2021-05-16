@@ -123,6 +123,7 @@ class LocalUploadInterface(UploadInterface):
         return data
 
 
+# TODO rename from Recorder - it is read and write
 class UploadDetailsRecorder(ABC):
     @abstractmethod
     def save(self, details: Dict[str, str]) -> str:
@@ -130,6 +131,11 @@ class UploadDetailsRecorder(ABC):
 
     @abstractmethod
     def get_details(self, reference: str) -> UploadDetails:
+        """"""
+
+    # TODO make this a generator
+    @abstractmethod
+    def get_details_all(self) -> List[UploadDetails]:
         """"""
 
 
@@ -170,6 +176,18 @@ class JSONUploadDetailsRecorder(UploadDetailsRecorder):
             # never be processed, and the system will never get past this point.
             raise TypeError
         return details
+
+    def get_details_all(self) -> List[UploadDetails]:
+        """"""
+        output = []
+        for basename in os.listdir(self.path):
+            if basename.lower().endswith(".json") is False:
+                continue
+            with open(os.path.join(self.path, basename)) as f:
+                data = json.load(f)
+                details = UploadDetails(**data)
+            output.append(details)
+        return output
 
 
 class FieldInterface(ABC):

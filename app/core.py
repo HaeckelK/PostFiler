@@ -10,6 +10,7 @@ from interfaces import (
     FieldInterface,
     TextFileFieldInterface,
     LocalFileStorageInterface,
+    UploadDetails,
 )
 
 
@@ -76,3 +77,8 @@ def initial_setup():
         if not os.path.exists(directory):
             os.mkdir(directory)
     return
+
+
+def load_details_of_all_files() -> List[UploadDetails]:
+    details_loader = JSONUploadDetailsRecorder(save_path=DETAILS_PATH)
+    return processes.load_details_of_all_files(details_loader)
