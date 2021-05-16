@@ -5,14 +5,14 @@
 <form method=post enctype=multipart/form-data>
     <input type=file class="form-control-file" name=file>
     <br>
-    <label for="correspondenceType">Type:</label>
+    <label for="correspondenceType">Document Type:</label>
     <select class="form-control" id="correspondenceType" name="correspondenceType">
         {% for type in types %}
         <option value="{{type.lower()}}">{{type.title()}}</option>
         {% endfor %}
     </select>
     <br>
-    <label for="category">Category:</label>
+    <label for="category">Sender Category:</label>
     <select class="form-control" id="category" name="category">
         {% for category in categories %}
         <option value="{{category.lower()}}">{{category.title()}}</option>
